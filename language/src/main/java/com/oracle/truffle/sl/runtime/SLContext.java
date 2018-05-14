@@ -43,6 +43,7 @@ package com.oracle.truffle.sl.runtime;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -64,6 +65,7 @@ import com.oracle.truffle.api.object.Shape;
 import com.oracle.truffle.api.source.Source;
 import com.oracle.truffle.sl.SLLanguage;
 import com.oracle.truffle.sl.builtins.SLBuiltinNode;
+import com.oracle.truffle.sl.builtins.SLConsCellBuiltinFactory;
 import com.oracle.truffle.sl.builtins.SLDefineFunctionBuiltinFactory;
 import com.oracle.truffle.sl.builtins.SLEvalBuiltinFactory;
 import com.oracle.truffle.sl.builtins.SLGetSizeBuiltinFactory;
@@ -165,6 +167,7 @@ public final class SLContext {
         installBuiltin(SLHasSizeBuiltinFactory.getInstance());
         installBuiltin(SLIsExecutableBuiltinFactory.getInstance());
         installBuiltin(SLIsNullBuiltinFactory.getInstance());
+        installBuiltin(SLConsCellBuiltinFactory.getInstance());
     }
 
     public void installBuiltin(NodeFactory<? extends SLBuiltinNode> factory) {
@@ -228,6 +231,17 @@ public final class SLContext {
         object = emptyShape.newInstance();
         allocationReporter.onReturnValue(object, 0, AllocationReporter.SIZE_UNKNOWN);
         return object;
+    }
+    
+    public ArrayList createConsCell(Object head, Object tail) {
+        ArrayList result = new ArrayList();
+        result.add(head);
+        if (tail instanceof List) {
+            result.addAll((List) tail);
+        } else {
+            result.add(tail);
+        }
+        return result;
     }
 
     public static boolean isSLObject(TruffleObject value) {

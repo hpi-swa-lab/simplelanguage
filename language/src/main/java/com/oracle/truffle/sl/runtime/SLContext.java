@@ -43,7 +43,6 @@ package com.oracle.truffle.sl.runtime;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -231,17 +230,6 @@ public final class SLContext {
         object = emptyShape.newInstance();
         allocationReporter.onReturnValue(object, 0, AllocationReporter.SIZE_UNKNOWN);
         return object;
-    }
-    
-    public ArrayList createConsCell(Object head, Object tail) {
-        ArrayList result = new ArrayList();
-        result.add(head);
-        if (tail instanceof List) {
-            result.addAll((List) tail);
-        } else {
-            result.add(tail);
-        }
-        return result;
     }
 
     public static boolean isSLObject(TruffleObject value) {

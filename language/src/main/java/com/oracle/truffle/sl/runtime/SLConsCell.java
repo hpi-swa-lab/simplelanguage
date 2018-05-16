@@ -22,4 +22,9 @@ public class SLConsCell {
 	public Object getTail() {
 		return tail;
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("[%s,%s]", head.toString(), tail.toString());
+	}
 }

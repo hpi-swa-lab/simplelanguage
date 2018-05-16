@@ -70,6 +70,7 @@ import com.oracle.truffle.sl.builtins.SLDefineFunctionBuiltinFactory;
 import com.oracle.truffle.sl.builtins.SLEvalBuiltinFactory;
 import com.oracle.truffle.sl.builtins.SLGetSizeBuiltinFactory;
 import com.oracle.truffle.sl.builtins.SLHasSizeBuiltinFactory;
+import com.oracle.truffle.sl.builtins.SLHeadBuiltinFactory;
 import com.oracle.truffle.sl.builtins.SLHelloEqualsWorldBuiltinFactory;
 import com.oracle.truffle.sl.builtins.SLImportBuiltinFactory;
 import com.oracle.truffle.sl.builtins.SLIsExecutableBuiltinFactory;
@@ -168,6 +169,7 @@ public final class SLContext {
         installBuiltin(SLIsExecutableBuiltinFactory.getInstance());
         installBuiltin(SLIsNullBuiltinFactory.getInstance());
         installBuiltin(SLConsCellBuiltinFactory.getInstance());
+        installBuiltin(SLHeadBuiltinFactory.getInstance());
     }
 
     public void installBuiltin(NodeFactory<? extends SLBuiltinNode> factory) {

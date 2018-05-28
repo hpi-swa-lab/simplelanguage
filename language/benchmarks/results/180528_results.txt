@@ -1,0 +1,8 @@
+List size: 10000000
+Runs: 3
+Cons Class and fields not final
+====================
+Append 24396588300
+Reverse 8473141482
+Map 13255314324
+Filter 9352227334

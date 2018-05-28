@@ -1,0 +1,15 @@
+#!/bin/sh
+
+CMDS="
+Append
+Reverse
+Map
+Filter
+"
+
+for cmd in $CMDS; do
+    result=`./SL_RUN $cmd`
+    time=`awk 'END {print $NF}' <<< "$result"`
+    echo $cmd $time
+done
+

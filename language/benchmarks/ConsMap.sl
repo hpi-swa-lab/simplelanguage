@@ -4,20 +4,30 @@ function listLength() {
 
 function null() {}
 
-function append(list1, list2) {
+function swap(x) { 
+    if (x == E) { 
+        return F; 
+    } 
+    else { 
+        return E;
+    }
+}
+
+function map(list, fn) {
     aux = null();
 
-    while (list1 != null()) {
-        aux = cons(head(list1), aux);
-        list1 = tail(list1);
+    while (list != null()) {
+        aux = cons(fn(head(list)), aux);
+        list = tail(list);
     }
 
+    list = null();
     while (aux != null()) {
-        list2 = cons(head(aux), list2);
+        list = cons(head(aux), list);
         aux = tail(aux);
     }
-
-    return list2;
+    
+    return list;
 }
 
 function makeList(numElements) {
@@ -33,11 +43,10 @@ function makeList(numElements) {
 }
 
 function main() {
-    list1 = makeList(listLength());
-    list2 = makeList(listLength());
+    list = makeList(listLength());
 
     beginTime = nanoTime();
-    list3 = append(list1, list2);
+    mappedList = map(list, swap);
     endTime = nanoTime();
     println(endTime - beginTime);
 }

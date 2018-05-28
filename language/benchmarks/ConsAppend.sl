@@ -1,7 +1,3 @@
-function listLength() {
-    return 1000000;
-}
-
 function null() {}
 
 function append(list1, list2) {
@@ -33,8 +29,10 @@ function makeList(numElements) {
 }
 
 function main() {
-    list1 = makeList(listLength());
-    list2 = makeList(listLength());
+    listLength = num(readln());
+
+    list1 = makeList(listLength);
+    list2 = makeList(listLength);
 
     beginTime = nanoTime();
     list3 = append(list1, list2);

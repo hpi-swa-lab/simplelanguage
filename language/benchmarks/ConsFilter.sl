@@ -1,7 +1,3 @@
-function listLength() {
-    return 1000000;
-}
-
 function null() {}
 
 function isE(elem) {
@@ -51,7 +47,9 @@ function makeList(numElements) {
 }
 
 function main() {
-    list = makeList(listLength());
+    listLength = num(readln());
+
+    list = makeList(listLength);
 
     beginTime = nanoTime();
     filteredList = filter(list, isE);

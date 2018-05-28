@@ -1,7 +1,3 @@
-function listLength() {
-    return 1000000;
-}
-
 function null() {}
 
 function reverse(list) {
@@ -28,7 +24,9 @@ function makeList(numElements) {
 }
 
 function main() {
-    list = makeList(listLength());
+    listLength = num(readln());
+
+    list = makeList(listLength);
 
     beginTime = nanoTime();
     reversedList = reverse(list);

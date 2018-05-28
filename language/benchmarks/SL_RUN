@@ -1,0 +1,4 @@
+#!/bin/sh
+
+cd ../..
+echo 1000000 | ./sl ./language/benchmarks/Cons"$@".sl

@@ -1,7 +1,3 @@
-function listLength() {
-    return 1000000;
-}
-
 function null() {}
 
 function swap(x) { 
@@ -43,7 +39,9 @@ function makeList(numElements) {
 }
 
 function main() {
-    list = makeList(listLength());
+    listLength = num(readln());
+
+    list = makeList(listLength);
 
     beginTime = nanoTime();
     mappedList = map(list, swap);

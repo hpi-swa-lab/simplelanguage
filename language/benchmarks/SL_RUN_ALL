@@ -8,8 +8,16 @@ Filter
 "
 
 for cmd in $CMDS; do
-    result=`./SL_RUN $cmd`
-    time=`awk 'END {print $NF}' <<< "$result"`
-    echo $cmd $time
+    sum=0
+    count=0
+    for i in {1, $1}; do
+        result=`./SL_RUN $cmd`
+        time=`awk 'END {print $NF}' <<< "$result"`
+        sum=`expr $sum + $time`
+        count=`expr $count + 1`
+    done
+
+    avg=`expr $sum / $count`
+    echo $cmd $avg
 done
 

@@ -10,11 +10,20 @@ function swap(x) {
 }
 
 function map(list, fn) {
-    if (list == null()) {
-        return null();
+    aux = null();
+
+    while (list != null()) {
+        aux = cons(fn(head(list)), aux);
+        list = tail(list);
+    }
+
+    list = null();
+    while (aux != null()) {
+        list = cons(head(aux), list);
+        aux = tail(aux);
     }
     
-    return cons(fn(head(list)), map(tail(list), fn));
+    return list;
 }
 
 function main() {

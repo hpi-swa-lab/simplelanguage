@@ -1,15 +1,14 @@
 function null() {}
 
-function reverseAcc(l, acc) {
-    if (l == null()) {
-        return acc;
-    } else {
-        return reverseAcc(tail(l), cons(head(l), acc));
-    }
-}
+function reverse(list) {
+    result = null();
 
-function reverse(l) {
-    return reverseAcc(l, null());
+    while (list != null()) {
+        result = cons(head(list), result);
+        list = tail(list);
+    }
+
+    return result;
 }
 
 function main() {

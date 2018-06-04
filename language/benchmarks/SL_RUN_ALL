@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 CMDS="
 Append
@@ -9,12 +9,12 @@ Filter
 
 for cmd in $CMDS; do
     sum=0
-    count=0
-    for i in {1, $1}; do
+    count=$1
+    for ((i=1;i<=count;i++)); do
         result=`./SL_RUN $cmd`
         time=`awk 'END {print $NF}' <<< "$result"`
+        echo $i $time
         sum=`expr $sum + $time`
-        count=`expr $count + 1`
     done
 
     avg=`expr $sum / $count`

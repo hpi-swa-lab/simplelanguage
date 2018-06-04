@@ -1,5 +1,6 @@
-List size: 10000000
+List size: 10.000.000
 Runs: 3
+Machine: Philipp
 Cons Class and fields not final
 ====================
 Append 24396588300

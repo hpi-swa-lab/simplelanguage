@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 cd ../..
-echo 10000000 | ./sl ./language/benchmarks/Cons"$@".sl
+echo 100000000 | ./sl ./language/benchmarks/Cons"$@".sl

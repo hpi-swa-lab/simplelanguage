@@ -1,4 +1,4 @@
 #!/bin/bash
 
 cd ../..
-echo 100000000 | ./sl ./language/benchmarks/Cons"$@".sl
+printf "$1\n$2"  | ./sl ./language/benchmarks/Cons"$3".sl

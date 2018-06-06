@@ -40,11 +40,22 @@ function makeList(numElements) {
 
 function main() {
     listLength = num(readln());
+    reps = num(readln());
 
+    // warmup
     list = makeList(listLength);
+    map(list, swap);
 
-    beginTime = nanoTime();
-    mappedList = map(list, swap);
-    endTime = nanoTime();
-    println(endTime - beginTime);
+    i = 0;
+    sum = 0;
+    while (i < reps) {
+        list = makeList(listLength);
+        beginTime = nanoTime();
+        mappedList = map(list, swap);
+        endTime = nanoTime();
+        result = endTime - beginTime;
+        sum = sum + result;        
+        i = i + 1;
+    }
+    println(sum / reps);
 }

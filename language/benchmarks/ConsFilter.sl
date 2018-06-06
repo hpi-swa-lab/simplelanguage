@@ -48,11 +48,22 @@ function makeList(numElements) {
 
 function main() {
     listLength = num(readln());
+    reps = num(readln());
 
+    // warmup
     list = makeList(listLength);
+    filter(list, isE);
 
-    beginTime = nanoTime();
-    filteredList = filter(list, isE);
-    endTime = nanoTime();
-    println(endTime - beginTime);
+    i = 0;
+    sum = 0;
+    while(i < reps) {
+        list = makeList(listLength);
+        beginTime = nanoTime();
+        filteredList = filter(list, isE);
+        endTime = nanoTime();
+        result = endTime - beginTime;
+        sum = sum + result;
+        i = i + 1;
+    }
+    println(sum / reps);
 }

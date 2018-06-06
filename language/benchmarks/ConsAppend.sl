@@ -30,12 +30,23 @@ function makeList(numElements) {
 
 function main() {
     listLength = num(readln());
+    reps = num(readln());
+
+    // warmup
+    makeList(listLength);
 
     list1 = makeList(listLength);
     list2 = makeList(listLength);
 
-    beginTime = nanoTime();
-    list3 = append(list1, list2);
-    endTime = nanoTime();
-    println(endTime - beginTime);
+    i = 0;
+    sum = 0;
+    while(i < reps) {
+        beginTime = nanoTime();
+        list3 = append(list1, list2);
+        endTime = nanoTime();
+        result = endTime - beginTime;
+        sum = sum + result;
+        i = i + 1;
+    }
+    println(sum / reps);
 }

@@ -32,11 +32,15 @@ function main() {
     listLength = num(readln());
     reps = num(readln());
 
-    // warmup
-    makeList(listLength);
-
     list1 = makeList(listLength);
     list2 = makeList(listLength);
+
+    // warmup
+    i = 0;
+    while (i < reps) {
+        append(list1, list2);
+        i = i + 1;
+    }
 
     i = 0;
     sum = 0;
@@ -45,6 +49,7 @@ function main() {
         list3 = append(list1, list2);
         endTime = nanoTime();
         result = endTime - beginTime;
+        println(i + ": " + result);
         sum = sum + result;
         i = i + 1;
     }

@@ -42,19 +42,26 @@ function main() {
     listLength = num(readln());
     reps = num(readln());
 
-    // warmup
     list = makeList(listLength);
+
+    // warmup
+    i = 0;
+    while (i < reps) {
+        map(list, swap);
+        i = i + 1;
+    }
+
     map(list, swap);
 
     i = 0;
     sum = 0;
     while (i < reps) {
-        list = makeList(listLength);
         beginTime = nanoTime();
         mappedList = map(list, swap);
         endTime = nanoTime();
         result = endTime - beginTime;
-        sum = sum + result;        
+        println(i + ": " + result);
+        sum = sum + result;
         i = i + 1;
     }
     println(sum / reps);

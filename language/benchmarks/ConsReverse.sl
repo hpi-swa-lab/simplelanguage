@@ -27,18 +27,23 @@ function main() {
     listLength = num(readln());
     reps = num(readln());
 
-    // warumup
     list = makeList(listLength);
-    reverse(list);
+
+    // warumup
+    i = 0;
+    while (i < reps) {
+        reverse(list);
+        i = i + 1;
+    }
 
     i = 0;
     sum = 0;
     while(i < reps) {
-        list = makeList(listLength);
         beginTime = nanoTime();
         reversedList = reverse(list);
         endTime = nanoTime();
         result = endTime - beginTime;
+        println(i + ": " + result);
         sum = sum + result;
         i = i + 1;
     }

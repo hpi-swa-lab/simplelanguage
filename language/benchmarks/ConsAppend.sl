@@ -36,22 +36,23 @@ function main() {
     list2 = makeList(listLength);
 
     // warmup
+    warmupReps = reps;
+    if (reps > 100) {
+        warmupReps = 100;
+    }
     i = 0;
-    while (i < reps) {
+    while (i < warmupReps) {
         append(list1, list2);
         i = i + 1;
     }
 
     i = 0;
-    sum = 0;
     while(i < reps) {
         beginTime = nanoTime();
         list3 = append(list1, list2);
         endTime = nanoTime();
         result = endTime - beginTime;
         println(i + ": " + result);
-        sum = sum + result;
         i = i + 1;
     }
-    println(sum / reps);
 }

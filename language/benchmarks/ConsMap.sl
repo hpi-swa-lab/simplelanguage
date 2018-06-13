@@ -45,8 +45,12 @@ function main() {
     list = makeList(listLength);
 
     // warmup
+    warmupReps = reps;
+    if (reps > 100) {
+        warmupReps = 100;
+    }
     i = 0;
-    while (i < reps) {
+    while (i < warmupReps) {
         map(list, swap);
         i = i + 1;
     }
@@ -54,15 +58,12 @@ function main() {
     map(list, swap);
 
     i = 0;
-    sum = 0;
     while (i < reps) {
         beginTime = nanoTime();
         mappedList = map(list, swap);
         endTime = nanoTime();
         result = endTime - beginTime;
         println(i + ": " + result);
-        sum = sum + result;
         i = i + 1;
     }
-    println(sum / reps);
 }

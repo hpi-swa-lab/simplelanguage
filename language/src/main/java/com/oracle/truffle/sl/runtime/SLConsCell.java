@@ -1,9 +1,11 @@
 package com.oracle.truffle.sl.runtime;
 
-public class SLConsCell {
+import com.oracle.truffle.api.CompilerDirectives.TruffleBoundary;
 
-	private Object head;
-	private Object tail;
+public final class SLConsCell {
+
+	private final Object head;
+	private final Object tail;
 	
 	public SLConsCell(Object head, Object tail) {
 		this.head = head;
@@ -19,6 +21,7 @@ public class SLConsCell {
 	}
 	
 	@Override
+	@TruffleBoundary
 	public String toString() {
 		return String.format("[%s,%s]", head.toString(), tail.toString());
 	}

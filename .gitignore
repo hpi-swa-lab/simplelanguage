@@ -12,3 +12,4 @@ graalvm/
 /bin/
 /Coco.jar
 .vscode
+dumps/

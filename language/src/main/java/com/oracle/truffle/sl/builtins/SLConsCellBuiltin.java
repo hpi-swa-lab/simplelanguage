@@ -2,9 +2,8 @@ package com.oracle.truffle.sl.builtins;
 
 import com.oracle.truffle.api.dsl.Specialization;
 import com.oracle.truffle.api.nodes.NodeInfo;
-import com.oracle.truffle.sl.runtime.SLConsCell;
-import com.oracle.truffle.sl.runtime.SLFuncConsCell;
-import com.oracle.truffle.sl.runtime.SLFunction;
+import com.oracle.truffle.api.object.*;
+import com.oracle.truffle.sl.runtime.SLObjectType;
 
 /**
  * Built-in function to create a new cons cell.
@@ -12,17 +11,25 @@ import com.oracle.truffle.sl.runtime.SLFunction;
 @NodeInfo(shortName = "cons")
 public abstract class SLConsCellBuiltin extends SLBuiltinNode {
 
+    private static final Layout LAYOUT = Layout.createLayout();
+
     @Specialization
-    public final SLFuncConsCell newCell(SLFunction head, Object tail) {
-        return new SLFuncConsCell(head, tail);
+    public final DynamicObject newCell(Object head, Object tail) {
+        Shape.Allocator allocator = LAYOUT.createAllocator();
+        Location headLocation = allocator.locationForType(Integer.class);
+        Location tailLocation = allocator.locationForType(Object.class);
+
+        Shape shape = LAYOUT.createShape(SLObjectType.SINGLETON)
+                .addProperty(
+                        Property.create("head", headLocation, 0)
+                )
+                .addProperty(
+                        Property.create("tail", tailLocation, 0));
+
+        DynamicObject cell = shape.newInstance();
+        cell.set("head", head);
+        cell.set("tail", tail);
+        return cell;
     }
 
-    @Specialization(guards = "!isFunc(head)")
-    public final SLConsCell newCell(Object head, Object tail) {
-        return new SLConsCell(head, tail);
-    }
-
-    protected boolean isFunc(Object head) {
-        return head instanceof SLFunction;
-    }
 }

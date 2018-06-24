@@ -52,6 +52,8 @@ if [[ "$GRAALVM_VERSION" != "" ]]; then
           JAVA_ARGS="$JAVA_ARGS -Dgraal.Dump=Truffle:1 -Dgraal.TruffleBackgroundCompilation=false -Dgraal.TraceTruffleCompilation=true -Dgraal.TraceTruffleCompilationDetails=true" ;;
         -trace)
           JAVA_ARGS="$JAVA_ARGS -Dgraal.TraceTruffleCompilation=true -Dgraal.TraceTruffleTransferToInterpreter=true -Dgraal.TraceTruffleAssumptions=true -XX:+TraceDeoptimization" ;;
+        -gc)
+          JAVA_ARGS="$JAVA_ARGS -XX:+PrintGC -XX:+PrintGCDetails" ;;
         -disassemble)
           JAVA_ARGS="$JAVA_ARGS -XX:CompileCommand=print,*OptimizedCallTarget.callRoot -XX:CompileCommand=exclude,*OptimizedCallTarget.callRoot -Dgraal.TruffleBackgroundCompilation=false -Dgraal.TraceTruffleCompilation=true -Dgraal.TraceTruffleCompilationDetails=true" ;;
         -J*)

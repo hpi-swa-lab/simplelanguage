@@ -17,19 +17,30 @@ public class SLShapeWrapper {
         return wrapperMap.get(shape);
     }
 
-    public static Shape inlineSubshape(Shape shape, Shape subshape, Integer position, String propertyName) {
-        for (Property property : subshape.getProperties()) {
-            if (!(property.getKey() instanceof String)) {
+    public static void inlineSubobject(DynamicObject object, DynamicObject subobject, String inlinedPropertyName) {
+        for (Property subobjectProperty : subobject.getShape().getProperties()) {
+            if (!(subobjectProperty.getKey() instanceof String)) {
                 throw new AssertionError("Shape key is not a string.");
             }
-            String key = propertyName + "_" + (String)property.getKey();
-            Shape.Allocator allocator = shape.allocator();
-            shape = shape.addProperty(Property.create(key, allocator.locationForType(Object.class), 0));
+            String key = inlinedPropertyName + "_" + (String)subobjectProperty.getKey();
+            Object value = subobjectProperty.get(subobject, false);
+            object.define(key, value);
         }
-
-        System.out.println("Inlining result:\n" + shape.toString());
-        return shape;
     }
+
+    // public static Shape inlineSubshape(Shape shape, Shape subshape, Integer position, String propertyName) {
+    //     for (Property property : subshape.getProperties()) {
+    //         if (!(property.getKey() instanceof String)) {
+    //             throw new AssertionError("Shape key is not a string.");
+    //         }
+    //         String key = propertyName + "_" + (String)property.getKey();
+    //         Shape.Allocator allocator = shape.allocator();
+    //         shape = shape.addProperty(Property.create(key, allocator.locationForType(Object.class), 0));
+    //     }
+
+    //     System.out.println("Inlining result:\n" + shape.toString());
+    //     return shape;
+    // }
 
     private static Map<Shape, SLShapeWrapper> wrapperMap = new HashMap<>();
 

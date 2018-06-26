@@ -24,21 +24,25 @@ public abstract class SLConsCellBuiltin extends SLBuiltinNode {
     @Specialization
     public final DynamicObject newCell(Object head, Object tail) {
 
-        Property headProperty = Property.create("head", headLocation, 0);
-        Property tailProperty = Property.create("tail", headLocation, 0);
-        Shape shape = emptyShape
-                .addProperty(headProperty)
-                .addProperty(tailProperty);
+        // Property headProperty = Property.create("head", headLocation, 0);
+        // Property tailProperty = Property.create("tail", headLocation, 0);
+        // Shape shape = emptyShape
+        //         .addProperty(headProperty)
+        //         .addProperty(tailProperty);
 
-        SLShapeWrapper wrapper = SLShapeWrapper.getWrapperForShape(shape);
+        DynamicObject cell = emptyShape.newInstance();
+        cell.define("head", head);
+        cell.define("tail", tail);
+
+        SLShapeWrapper wrapper = SLShapeWrapper.getWrapperForShape(cell.getShape());
 
         if (head instanceof DynamicObject) {
             DynamicObject headDynamic = (DynamicObject)head;
             Shape headSubshape = headDynamic.getShape();
             wrapper.observeSubshape(0, headSubshape);
             if (wrapper.isTransformation(0, headSubshape)) {
-                shape = shape.removeProperty(headProperty); 
-                shape = SLShapeWrapper.inlineSubshape(shape, headSubshape, 0, "head");
+                cell.delete("head");
+                SLShapeWrapper.inlineSubobject(cell, headDynamic, "head");
             }
         }
 
@@ -47,18 +51,19 @@ public abstract class SLConsCellBuiltin extends SLBuiltinNode {
             Shape tailSubshape = tailDynamic.getShape();
             wrapper.observeSubshape(1, tailSubshape);
             if (wrapper.isTransformation(1, tailSubshape)) {
-                shape = shape.removeProperty(tailProperty); 
-                shape = SLShapeWrapper.inlineSubshape(shape, tailSubshape, 1, "tail");
+                cell.delete("tail");
+                SLShapeWrapper.inlineSubobject(cell, tailDynamic, "tail");
             }
         }
+        
+        System.out.println("----");
+        System.out.println("Object shape:");
+        System.out.println(cell.getShape());
+        System.out.println("Object content:");
+        for (Property property : cell.getShape().getProperties()) {
+            System.out.println(property.getKey() + ": " + cell.get(property.getKey()));
+        }
 
-        // Shape may have changed due to tranformations
-        wrapper = SLShapeWrapper.getWrapperForShape(shape);
-
-        DynamicObject cell = shape.newInstance();
-        cell.set("head", head);
-        cell.set("tail", tail);
-        System.out.println("Object shape: " + cell.getShape());
         return cell;
     }
 }

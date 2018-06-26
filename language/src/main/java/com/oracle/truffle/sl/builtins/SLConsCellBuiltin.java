@@ -16,19 +16,10 @@ import com.oracle.truffle.sl.runtime.SLObjectType;
 public abstract class SLConsCellBuiltin extends SLBuiltinNode {
 
     private static final Layout LAYOUT = Layout.createLayout();
-    private static final Shape.Allocator ALLOCATOR = LAYOUT.createAllocator();
-    private static final Location headLocation = ALLOCATOR.locationForType(Object.class);
-    private static final Location tailLocation = ALLOCATOR.locationForType(Object.class);
     private static final Shape emptyShape = LAYOUT.createShape(SLObjectType.SINGLETON);
 
     @Specialization
     public final DynamicObject newCell(Object head, Object tail) {
-
-        // Property headProperty = Property.create("head", headLocation, 0);
-        // Property tailProperty = Property.create("tail", headLocation, 0);
-        // Shape shape = emptyShape
-        //         .addProperty(headProperty)
-        //         .addProperty(tailProperty);
 
         DynamicObject cell = emptyShape.newInstance();
         cell.define("head", head);

@@ -17,6 +17,46 @@ public class SLShapeWrapper {
         return wrapperMap.get(shape);
     }
 
+    public static void observeObject(DynamicObject object) {
+        SLShapeWrapper wrapper = SLShapeWrapper.getWrapperForShape(object.getShape());
+
+        int i = 0;
+        for (Property objectProperty : object.getShape().getProperties()) {
+            Object value = objectProperty.get(object, false);
+            if (value instanceof DynamicObject) {
+                DynamicObject subObject = (DynamicObject)value;
+                wrapper.observeSubshape(i, subObject.getShape());
+            }
+
+            i++;
+        }
+    }
+
+    public static void optimizeObject(DynamicObject object) {
+        Shape shape = object.getShape();
+        SLShapeWrapper wrapper = SLShapeWrapper.getWrapperForShape(shape); 
+
+        int i = 0;
+        for (Property objectProperty : object.getShape().getProperties()) {
+            Object value = objectProperty.get(object, false);
+            if (value instanceof DynamicObject) {
+                DynamicObject subObject = (DynamicObject)value;
+                // TODO: find out original shape of subobject and recursively inline if possible
+                if (!(objectProperty.getKey() instanceof String)) {
+                    throw new AssertionError("Shape key is not a string.");
+                }
+                String key = (String)objectProperty.getKey();
+
+                if (wrapper.isTransformation(i, subObject.getShape())) {
+                    object.delete(key);
+                    inlineSubobject(object, subObject, key);
+                }
+            }
+
+            i++;
+        }
+    }
+
     public static void inlineSubobject(DynamicObject object, DynamicObject subobject, String inlinedPropertyName) {
         for (Property subobjectProperty : subobject.getShape().getProperties()) {
             if (!(subobjectProperty.getKey() instanceof String)) {

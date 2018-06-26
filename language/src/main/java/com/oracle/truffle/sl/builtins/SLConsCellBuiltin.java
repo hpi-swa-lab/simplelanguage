@@ -27,25 +27,8 @@ public abstract class SLConsCellBuiltin extends SLBuiltinNode {
 
         SLShapeWrapper wrapper = SLShapeWrapper.getWrapperForShape(cell.getShape());
 
-        if (head instanceof DynamicObject) {
-            DynamicObject headDynamic = (DynamicObject)head;
-            Shape headSubshape = headDynamic.getShape();
-            wrapper.observeSubshape(0, headSubshape);
-            if (wrapper.isTransformation(0, headSubshape)) {
-                cell.delete("head");
-                SLShapeWrapper.inlineSubobject(cell, headDynamic, "head");
-            }
-        }
-
-        if (tail instanceof DynamicObject) {
-            DynamicObject tailDynamic = (DynamicObject)tail;
-            Shape tailSubshape = tailDynamic.getShape();
-            wrapper.observeSubshape(1, tailSubshape);
-            if (wrapper.isTransformation(1, tailSubshape)) {
-                cell.delete("tail");
-                SLShapeWrapper.inlineSubobject(cell, tailDynamic, "tail");
-            }
-        }
+        SLShapeWrapper.observeObject(cell);
+        SLShapeWrapper.optimizeObject(cell);
         
         System.out.println("----");
         System.out.println("Object shape:");

@@ -10,10 +10,10 @@ import com.oracle.truffle.api.object.*;
 import com.oracle.truffle.sl.runtime.SLObjectType;
 
 /**
- * Built-in function to create a new cons cell.
+ * Built-in function to create a new cons cell dynamic object with shapes.
  */
-@NodeInfo(shortName = "cons")
-public abstract class SLConsCellBuiltin extends SLBuiltinNode {
+@NodeInfo(shortName = "consDows")
+public abstract class SLConsCellBuiltinDynamicObjectWithShapes extends SLBuiltinNode {
 
     private static final Layout LAYOUT = Layout.createLayout();
     private static final Shape emptyShape = LAYOUT.createShape(SLObjectType.SINGLETON);
@@ -29,14 +29,6 @@ public abstract class SLConsCellBuiltin extends SLBuiltinNode {
 
         SLShapeWrapper.observeObject(cell);
         SLShapeWrapper.optimizeObject(cell);
-        
-        System.out.println("----");
-        System.out.println("Object shape:");
-        System.out.println(cell.getShape());
-        System.out.println("Object content:");
-        for (Property property : cell.getShape().getProperties()) {
-            System.out.println(property.getKey() + ": " + cell.get(property.getKey()));
-        }
 
         return cell;
     }

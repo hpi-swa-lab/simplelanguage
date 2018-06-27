@@ -7,10 +7,11 @@ import com.oracle.truffle.sl.runtime.SLFuncConsCell;
 import com.oracle.truffle.sl.runtime.SLFunction;
 
 /**
- * Built-in function to create a new cons cell.
+ * Built-in function to create a new cons cell, specialized for SLFunctions.
+ * SLFunctions are elements like "E" and "F" we use to fill the cons lists.
  */
 @NodeInfo(shortName = "cons")
-public abstract class SLConsCellBuiltin extends SLBuiltinNode {
+public abstract class SLConsCellBuiltinWithSpecialization extends SLBuiltinNode {
 
     @Specialization
     public final SLFuncConsCell newCell(SLFunction head, Object tail) {

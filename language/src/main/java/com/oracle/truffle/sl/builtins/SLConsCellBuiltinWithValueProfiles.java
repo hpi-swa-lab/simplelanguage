@@ -12,7 +12,7 @@ import com.oracle.truffle.sl.runtime.SLConsCell;
 @NodeInfo(shortName = "consWvp")
 public abstract class SLConsCellBuiltinWithValueProfiles extends SLBuiltinNode {
 
-    ValueProfile valueProfile = ValueProfile.createClassProfile();
+    private final ValueProfile valueProfile = ValueProfile.createClassProfile();
 
     @Specialization
     public final SLConsCell newCell(Object head, Object tail) {

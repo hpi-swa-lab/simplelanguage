@@ -2,7 +2,8 @@ package com.oracle.truffle.sl.builtins;
 
 import com.oracle.truffle.api.dsl.Specialization;
 import com.oracle.truffle.api.nodes.NodeInfo;
-import com.oracle.truffle.sl.runtime.SLProfileConsCell;
+import com.oracle.truffle.api.profiles.ValueProfile;
+import com.oracle.truffle.sl.runtime.SLConsCell;
 
 /**
  * Built-in function to create a new generic cons cell, simply holding Objects.
@@ -11,8 +12,10 @@ import com.oracle.truffle.sl.runtime.SLProfileConsCell;
 @NodeInfo(shortName = "consWvp")
 public abstract class SLConsCellBuiltinWithValueProfiles extends SLBuiltinNode {
 
+    ValueProfile valueProfile = ValueProfile.createClassProfile();
+
     @Specialization
-    public final SLProfileConsCell newCell(Object head, Object tail) {
-        return new SLProfileConsCell(head, tail);
+    public final SLConsCell newCell(Object head, Object tail) {
+        return new SLConsCell(valueProfile.profile(head), tail);
     }
 }

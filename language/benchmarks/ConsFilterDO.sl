@@ -11,7 +11,7 @@ function filter(list, condition) {
 
     while (list != 0) {
         if (condition(list.head)) {
-            aux = cons(list.head, aux);
+            aux = consDo(list.head, aux);
         }
 
         list = list.tail;
@@ -19,7 +19,7 @@ function filter(list, condition) {
 
     list = 0;
     while (aux != 0) {
-        list = cons(aux.head, list);
+        list = consDo(aux.head, list);
         aux = aux.tail;
     }
 
@@ -37,7 +37,7 @@ function makeList(numElements) {
             elem = 0;
         }
 
-        cur = cons(elem, cur);
+        cur = consDo(elem, cur);
         i = i + 1;
     }
 

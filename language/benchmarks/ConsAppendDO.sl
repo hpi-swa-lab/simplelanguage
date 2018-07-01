@@ -2,12 +2,12 @@ function append(list1, list2) {
     aux = 0;
 
     while (list1 != 0) {
-        aux = cons(list1.head, aux);
+        aux = consDo(list1.head, aux);
         list1 = list1.tail;
     }
 
     while (aux != 0) {
-        list2 = cons(aux.head, list2);
+        list2 = consDo(aux.head, list2);
         aux = aux.tail;
     }
 
@@ -19,7 +19,7 @@ function makeList(numElements) {
 
     i = 1;
     while (i <= numElements) {
-        cur = cons(i, cur);
+        cur = consDo(i, cur);
         i = i + 1;
     }
 

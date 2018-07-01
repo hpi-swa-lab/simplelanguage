@@ -11,13 +11,13 @@ function map(list, fn) {
     aux = 0;
 
     while (list != 0) {
-        aux = cons(fn(list.head), aux);
+        aux = consDo(fn(list.head), aux);
         list = list.tail;
     }
 
     list = 0;
     while (aux != 0) {
-        list = cons(aux.head, list);
+        list = consDo(aux.head, list);
         aux = aux.tail;
     }
     
@@ -29,7 +29,7 @@ function makeList(numElements) {
 
     i = 1;
     while (i <= numElements) {
-        cur = cons(1, cur);
+        cur = consDo(1, cur);
         i = i + 1;
     }
 

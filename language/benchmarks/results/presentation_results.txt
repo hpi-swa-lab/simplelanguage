@@ -1,0 +1,38 @@
+List size: 5.000.000
+VM runs: 5
+Inner runs: 250
+Machine: Jonas
+Xms: 4g
+Xmx: 8g
+
+Results in ms:
+
+1: Baseline
+  Append:   51.1
+  Reverse:  25.0
+  Map:      52.8
+  Filter:   36.1
+
+2: FuncConsCell
+  Append:   52.5
+  Reverse:  25.8
+  Map:      51.6
+  Filter:   34.8
+
+3: Value Profiles
+  Append:   57.4
+  Reverse:  28.5
+  Map:      57.4
+  Filter:   39.1
+
+4: Dynamic Objects - list 100x smaller! (50.000)
+  Append:   57.7
+  Reverse:  27.2
+  Map:      57.1
+  Filter:   28.4
+
+5: -XX:-UseJVMCICompiler (disables Graal as top tier JIT)
+  Append:   50.8
+  Reverse:  23.9
+  Map:      52.1
+  Filter:   36.5

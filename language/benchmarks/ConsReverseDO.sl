@@ -2,7 +2,7 @@ function reverse(list) {
     result = 0;
 
     while (list != 0) {
-        result = cons(list.head, result);
+        result = consDo(list.head, result);
         list = list.tail;
     }
 
@@ -14,7 +14,7 @@ function makeList(numElements) {
 
     i = 1;
     while (i <= numElements) {
-        cur = cons(i, cur);
+        cur = consDo(i, cur);
         i = i + 1;
     }
 

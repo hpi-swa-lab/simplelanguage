@@ -52,6 +52,10 @@ if [[ "$GRAALVM_VERSION" != "" ]]; then
           JAVA_ARGS="$JAVA_ARGS -Dgraal.Dump=Truffle:1 -Dgraal.TruffleBackgroundCompilation=false -Dgraal.TraceTruffleCompilation=true -Dgraal.TraceTruffleCompilationDetails=true" ;;
         -trace)
           JAVA_ARGS="$JAVA_ARGS -Dgraal.TraceTruffleCompilation=true -Dgraal.TraceTruffleTransferToInterpreter=true -Dgraal.TraceTruffleAssumptions=true -XX:+TraceDeoptimization" ;;
+        -gc)
+          JAVA_ARGS="$JAVA_ARGS -XX:+PrintGC -XX:+PrintGCDetails" ;;
+        -nograal)
+          JAVA_ARGS="$JAVA_ARGS -XX:-UseJVMCICompiler" ;;
         -disassemble)
           JAVA_ARGS="$JAVA_ARGS -XX:CompileCommand=print,*OptimizedCallTarget.callRoot -XX:CompileCommand=exclude,*OptimizedCallTarget.callRoot -Dgraal.TruffleBackgroundCompilation=false -Dgraal.TraceTruffleCompilation=true -Dgraal.TraceTruffleCompilationDetails=true" ;;
         -J*)
@@ -61,7 +65,7 @@ if [[ "$GRAALVM_VERSION" != "" ]]; then
           PROGRAM_ARGS="$PROGRAM_ARGS $opt" ;;
       esac
     done
-    $JAVACMD $JAVA_ARGS -Xmx8g -Dtruffle.class.path.append=$LANGUAGE_PATH -cp $LAUNCHER_PATH $MAIN_CLASS $PROGRAM_ARGS
+    $JAVACMD $JAVA_ARGS -Xmx8g -Xms4g -Dtruffle.class.path.append=$LANGUAGE_PATH -cp $LAUNCHER_PATH $MAIN_CLASS $PROGRAM_ARGS
 else
     echo "Warning: Could not find GraalVM on $JAVA_HOME. Running on JDK without support for compilation."
     echo

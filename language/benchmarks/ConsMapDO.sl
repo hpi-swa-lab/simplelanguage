@@ -1,32 +1,30 @@
-function null() {}
-
-function toF(x) { 
-    return x + 10;
+function toZero(x) { 
+    return 0;
 }
 
 function map(list, fn) {
-    aux = null();
+    aux = 0;
 
-    while (list != null()) {
-        aux = consWvp(fn(head(list)), aux);
-        list = tail(list);
+    while (list != 0) {
+        aux = consDo(fn(list.head), aux);
+        list = list.tail;
     }
 
-    list = null();
-    while (aux != null()) {
-        list = consWvp(head(aux), list);
-        aux = tail(aux);
+    list = 0;
+    while (aux != 0) {
+        list = consDo(aux.head, list);
+        aux = aux.tail;
     }
     
     return list;
 }
 
 function makeList(numElements) {
-    cur = null();
+    cur = 0;
 
     i = 0;
     while (i < numElements) {
-        cur = consWvp(1, cur);
+        cur = consDo(1, cur);
         i = i + 1;
     }
 
@@ -42,7 +40,7 @@ function main() {
     // warmup
     i = 0;
     while (i < 3) {
-        map(list, toF);
+        map(list, toZero);
         i = i + 1;
     }
 
@@ -51,7 +49,7 @@ function main() {
     while (i < reps) {
         gc();
         beginTime = nanoTime();
-        mappedList = map(list, toF);
+        mappedList = map(list, toZero);
         endTime = nanoTime();
         result = endTime - beginTime;
         println(i + ": " + result);

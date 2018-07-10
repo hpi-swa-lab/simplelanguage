@@ -1,27 +1,25 @@
-function null() {}
-
 function append(list1, list2) {
-    aux = null();
+    aux = 0;
 
-    while (list1 != null()) {
-        aux = consWvp(head(list1), aux);
-        list1 = tail(list1);
+    while (list1 != 0) {
+        aux = consDo(list1.head, aux);
+        list1 = list1.tail;
     }
 
-    while (aux != null()) {
-        list2 = consWvp(head(aux), list2);
-        aux = tail(aux);
+    while (aux != 0) {
+        list2 = consDo(aux.head, list2);
+        aux = aux.tail;
     }
 
     return list2;
 }
 
 function makeList(numElements) {
-    cur = null();
+    cur = 0;
 
-    i = 0;
-    while (i < numElements) {
-        cur = consWvp(1, cur);
+    i = 1;
+    while (i <= numElements) {
+        cur = consDo(i, cur);
         i = i + 1;
     }
 

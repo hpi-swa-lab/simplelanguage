@@ -151,9 +151,14 @@ public final class SLContext {
         installBuiltin(SLIsExecutableBuiltinFactory.getInstance());
         installBuiltin(SLIsNullBuiltinFactory.getInstance());
         installBuiltin(SLConsCellBuiltinFactory.getInstance());
+        installBuiltin(SLConsCellBuiltinDynamicObjectFactory.getInstance());
+        installBuiltin(SLConsCellBuiltinDynamicObjectWithShapesFactory.getInstance());
+        installBuiltin(SLConsCellBuiltinWithSpecializationFactory.getInstance());
+        installBuiltin(SLConsCellBuiltinWithValueProfilesFactory.getInstance());
         installBuiltin(SLHeadBuiltinFactory.getInstance());
         installBuiltin(SLTailBuiltinFactory.getInstance());
         installBuiltin(SLNumberCastBuiltinFactory.getInstance());
+        installBuiltin(SLGarbageCollectBuiltinFactory.getInstance());
     }
 
     public void installBuiltin(NodeFactory<? extends SLBuiltinNode> factory) {

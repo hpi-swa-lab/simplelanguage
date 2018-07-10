@@ -1,19 +1,25 @@
 package com.oracle.truffle.sl.runtime.conscell;
 
-import java.util.Arrays;
+import com.oracle.truffle.sl.runtime.conscell.SLConsCell2;
 
 public final class SLConsCell3 extends SLConsCell {
 	
-	private final Object tail1;
-	private final Object tail2;
+	// Implicit shape:
+	//   - head
+	//   - SLConsCell2
+	//		- head
+	//		- tail
+
+	private final Object inlinedHead;
+	private final Object inlinedTail;
 
 	public SLConsCell3(Object head, SLConsCell2 tailCell) {
 		super(head);
-		this.tail1 = tailCell.getHead();
-		this.tail2 = tailCell.getTail();
+		this.inlinedHead = tailCell.getHead();
+		this.inlinedTail = tailCell.getTail();
 	}
 
 	public Object getTail() {
-		return Arrays.asList(this.tail1, this.tail2);
+		return new SLConsCell2(this.inlinedHead, this.inlinedTail);
 	}
 }

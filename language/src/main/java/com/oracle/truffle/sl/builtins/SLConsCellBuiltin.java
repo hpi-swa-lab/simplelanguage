@@ -3,8 +3,9 @@ package com.oracle.truffle.sl.builtins;
 import com.oracle.truffle.api.dsl.Specialization;
 import com.oracle.truffle.api.nodes.NodeInfo;
 import com.oracle.truffle.sl.runtime.conscell.SLConsCell;
-import com.oracle.truffle.sl.runtime.SLFuncConsCell;
-import com.oracle.truffle.sl.runtime.SLFunction;
+import com.oracle.truffle.sl.runtime.conscell.SLConsCell2;
+import com.oracle.truffle.sl.runtime.conscell.SLConsCell3;
+import com.oracle.truffle.sl.runtime.conscell.SLConsCell4;
 
 /**
  * Built-in function to create a new cons cell.
@@ -13,16 +14,13 @@ import com.oracle.truffle.sl.runtime.SLFunction;
 public abstract class SLConsCellBuiltin extends SLBuiltinNode {
 
     @Specialization
-    public final SLFuncConsCell newCell(SLFunction head, Object tail) {
-        return new SLFuncConsCell(head, tail);
-    }
-
-    @Specialization(guards = "!isFunc(head)")
     public final SLConsCell newCell(Object head, Object tail) {
-        return new SLConsCell(head, tail);
-    }
-
-    protected boolean isFunc(Object head) {
-        return head instanceof SLFunction;
+        if (tail instanceof SLConsCell2) {
+            return new SLConsCell3(head, (SLConsCell2)tail);
+        }
+        if (tail instanceof SLConsCell3) {
+            return new SLConsCell4(head, (SLConsCell3)tail);
+        }
+        return new SLConsCell2(head, tail);
     }
 }

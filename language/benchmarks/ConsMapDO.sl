@@ -1,10 +1,5 @@
-function swap(x) { 
-    if (x == 1) { 
-        return 0; 
-    } 
-    else { 
-        return 1;
-    }
+function toZero(x) { 
+    return 0;
 }
 
 function map(list, fn) {
@@ -27,8 +22,8 @@ function map(list, fn) {
 function makeList(numElements) {
     cur = 0;
 
-    i = 1;
-    while (i <= numElements) {
+    i = 0;
+    while (i < numElements) {
         cur = consDo(1, cur);
         i = i + 1;
     }
@@ -43,25 +38,23 @@ function main() {
     list = makeList(listLength);
 
     // warmup
-    warmupReps = reps;
-    if (reps > 100) {
-        warmupReps = 100;
-    }
     i = 0;
-    while (i < warmupReps) {
-        map(list, swap);
+    while (i < 3) {
+        map(list, toZero);
         i = i + 1;
     }
 
-    map(list, swap);
-
     i = 0;
+    sum = 0;
     while (i < reps) {
+        gc();
         beginTime = nanoTime();
-        mappedList = map(list, swap);
+        mappedList = map(list, toZero);
         endTime = nanoTime();
         result = endTime - beginTime;
         println(i + ": " + result);
         i = i + 1;
+        sum = sum + result;
     }
+    println(sum / reps);
 }

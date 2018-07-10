@@ -27,30 +27,30 @@ function makeList(numElements) {
 }
 
 function main() {
-    listLength = num(readln());
+    listLength = num(readln()) / 2;
     reps = num(readln());
 
     list1 = makeList(listLength);
     list2 = makeList(listLength);
 
     // warmup
-    warmupReps = reps;
-    if (reps > 100) {
-        warmupReps = 100;
-    }
     i = 0;
-    while (i < warmupReps) {
+    while (i < 3) {
         append(list1, list2);
         i = i + 1;
     }
 
     i = 0;
+    sum = 0;
     while(i < reps) {
+        gc();
         beginTime = nanoTime();
         list3 = append(list1, list2);
         endTime = nanoTime();
         result = endTime - beginTime;
         println(i + ": " + result);
         i = i + 1;
+        sum = sum + result;
     }
+    println(sum / reps);
 }

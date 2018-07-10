@@ -48,26 +48,29 @@ function main() {
     listLength = num(readln());
     reps = num(readln());
 
+    println("makelist");
     list = makeList(listLength);
 
+    println("warmup");
     // warmup
-    warmupReps = reps;
-    if (reps > 100) {
-        warmupReps = 100;
-    }
     i = 0;
-    while (i < warmupReps) {
+    while (i < 3) {
         filter(list, isE);
         i = i + 1;
     }
 
+    println("run");
     i = 0;
+    sum = 0;
     while(i < reps) {
+        gc();
         beginTime = nanoTime();
         filteredList = filter(list, isE);
         endTime = nanoTime();
         result = endTime - beginTime;
         println(i + ": " + result);
         i = i + 1;
+        sum = sum + result;
     }
+    println(sum / reps);
 }

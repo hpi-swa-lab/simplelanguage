@@ -1,4 +1,5 @@
 #!/bin/bash
 
 cd ../..
-printf "$1\n$2"  | ./sl ./language/benchmarks/Cons"$3".sl | ./language/benchmarks/discardGCSpikes.py
+printf "$1\n$2"  | ./sl ./language/benchmarks/Cons"$3".sl
+#| ./language/benchmarks/discardGCSpikes.py

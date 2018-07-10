@@ -1,7 +1,7 @@
 function null() {}
 
 function isE(elem) {
-    return elem == E;
+    return elem == 0;
 }
 
 function isEven(i) {
@@ -13,7 +13,7 @@ function filter(list, condition) {
 
     while (list != null()) {
         if (condition(head(list))) {
-            aux = cons(head(list), aux);
+            aux = consWvp(head(list), aux);
         }
 
         list = tail(list);
@@ -21,7 +21,7 @@ function filter(list, condition) {
 
     list = null();
     while (aux != null()) {
-        list = cons(head(aux), list);
+        list = consWvp(head(aux), list);
         aux = tail(aux);
     }
 
@@ -34,12 +34,12 @@ function makeList(numElements) {
     i = 0;
     while (i < numElements) {
         even = isEven(i);
-        elem = F;
+        elem = 1;
         if (even) {
-            elem = E;
+            elem = 0;
         }
 
-        cur = cons(elem, cur);
+        cur = consWvp(elem, cur);
         i = i + 1;
     }
 
@@ -53,23 +53,23 @@ function main() {
     list = makeList(listLength);
 
     // warmup
-    warmupReps = reps;
-    if (reps > 100) {
-        warmupReps = 100;
-    }
     i = 0;
-    while (i < warmupReps) {
+    while (i < 3) {
         filter(list, isE);
         i = i + 1;
     }
 
     i = 0;
+    sum = 0;
     while(i < reps) {
+        gc();
         beginTime = nanoTime();
         filteredList = filter(list, isE);
         endTime = nanoTime();
         result = endTime - beginTime;
         println(i + ": " + result);
         i = i + 1;
+        sum = sum + result;
     }
+    println(sum / reps);
 }

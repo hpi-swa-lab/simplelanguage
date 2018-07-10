@@ -5,12 +5,11 @@ import com.oracle.truffle.api.nodes.NodeInfo;
 import com.oracle.truffle.api.profiles.ValueProfile;
 import com.oracle.truffle.sl.runtime.SLConsCell;
 import com.oracle.truffle.sl.runtime.SLFuncConsCell;
+import com.oracle.truffle.sl.runtime.SLLongConsCell;
 import com.oracle.truffle.sl.runtime.SLProfileConsCell;
 
 @NodeInfo(shortName = "tail")
 public abstract class SLTailBuiltin extends SLBuiltinNode {
-
-    private final ValueProfile valueProfile = ValueProfile.createClassProfile();
 
 
     @Specialization
@@ -19,8 +18,13 @@ public abstract class SLTailBuiltin extends SLBuiltinNode {
     }
 
     @Specialization
+    public final Object tail(SLLongConsCell consCell) {
+        return consCell.getTail();
+    }
+
+    @Specialization
     public final Object tail(SLProfileConsCell consCell) {
-        return valueProfile.profile(consCell.getTail());
+        return consCell.getTail();
     }
 
     @Specialization

@@ -17,12 +17,12 @@ public final class SLConsCell4 extends SLConsCell {
     public SLConsCell4(Object head, SLConsCell3 tailCell) {
         super(head);
         this.inlinedHead1 = tailCell.getHead();
-        SLConsCell2 cell = (SLConsCell2) tailCell.getTail();
+        SLConsCell2 cell = tailCell.getTail();
         this.inlinedHead2 = cell.getHead();
         this.inlinedTail = cell.getTail();
     }
 
-    public Object getTail() {
+    public SLConsCell2 getTail() {
         return new SLConsCell2(this.inlinedHead1, new SLConsCell2(this.inlinedHead2, this.inlinedTail));
     }
 }

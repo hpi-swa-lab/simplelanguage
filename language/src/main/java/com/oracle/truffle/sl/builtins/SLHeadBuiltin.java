@@ -3,9 +3,7 @@ package com.oracle.truffle.sl.builtins;
 import com.oracle.truffle.api.dsl.Specialization;
 import com.oracle.truffle.api.nodes.NodeInfo;
 import com.oracle.truffle.api.profiles.ValueProfile;
-import com.oracle.truffle.sl.runtime.conscell.SLConsCell;
-import com.oracle.truffle.sl.runtime.conscell.SLLongConsCell;
-import com.oracle.truffle.sl.runtime.conscell.SLProfileConsCell;
+import com.oracle.truffle.sl.runtime.conscell.*;
 
 
 @NodeInfo(shortName = "head")
@@ -24,7 +22,17 @@ public abstract class SLHeadBuiltin extends SLBuiltinNode {
     }
 
     @Specialization
-    public final Object head(SLConsCell consCell) {
+    public final Object head(SLConsCell2 consCell) {
+        return consCell.getHead();
+    }
+
+    @Specialization
+    public final Object head(SLConsCell3 consCell) {
+        return consCell.getHead();
+    }
+
+    @Specialization
+    public final Object head(SLConsCell4 consCell) {
         return consCell.getHead();
     }
 }

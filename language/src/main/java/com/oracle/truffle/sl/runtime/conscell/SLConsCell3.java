@@ -17,7 +17,7 @@ public final class SLConsCell3 extends SLConsCell {
         this.inlinedTail = tailCell.getTail();
     }
 
-    public Object getTail() {
+    public SLConsCell2 getTail() {
         return new SLConsCell2(this.inlinedHead, this.inlinedTail);
     }
 }

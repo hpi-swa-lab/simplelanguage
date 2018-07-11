@@ -1,13 +1,12 @@
 package com.oracle.truffle.sl.builtins;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.oracle.truffle.api.dsl.Specialization;
 import com.oracle.truffle.api.nodes.NodeInfo;
-import com.oracle.truffle.sl.runtime.*;
-import com.oracle.truffle.api.object.*;
+import com.oracle.truffle.api.object.DynamicObject;
+import com.oracle.truffle.api.object.Layout;
+import com.oracle.truffle.api.object.Shape;
 import com.oracle.truffle.sl.runtime.SLObjectType;
+import com.oracle.truffle.sl.runtime.SLShapeWrapper;
 
 /**
  * Built-in function to create a new cons cell dynamic object with shapes.

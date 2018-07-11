@@ -1,4 +1,4 @@
-package com.oracle.truffle.sl.runtime;
+package com.oracle.truffle.sl.runtime.conscell;
 
 public final class SLLongConsCell {
 

@@ -1,11 +1,13 @@
 package com.oracle.truffle.sl.runtime;
 
+import com.oracle.truffle.api.object.DynamicObject;
+import com.oracle.truffle.api.object.Property;
+import com.oracle.truffle.api.object.Shape;
+
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.HashSet;
-
-import com.oracle.truffle.api.object.*;
 
 public class SLShapeWrapper {
 
@@ -24,7 +26,7 @@ public class SLShapeWrapper {
         for (Property objectProperty : object.getShape().getProperties()) {
             Object value = objectProperty.get(object, false);
             if (value instanceof DynamicObject) {
-                DynamicObject subObject = (DynamicObject)value;
+                DynamicObject subObject = (DynamicObject) value;
                 wrapper.observeSubshape(i, subObject.getShape());
             }
 
@@ -34,18 +36,18 @@ public class SLShapeWrapper {
 
     public static void optimizeObject(DynamicObject object) {
         Shape shape = object.getShape();
-        SLShapeWrapper wrapper = SLShapeWrapper.getWrapperForShape(shape); 
+        SLShapeWrapper wrapper = SLShapeWrapper.getWrapperForShape(shape);
 
         int i = 0;
         for (Property objectProperty : object.getShape().getProperties()) {
             Object value = objectProperty.get(object, false);
             if (value instanceof DynamicObject) {
-                DynamicObject subObject = (DynamicObject)value;
+                DynamicObject subObject = (DynamicObject) value;
                 // TODO: find out original shape of subobject and recursively inline if possible
                 if (!(objectProperty.getKey() instanceof String)) {
                     throw new AssertionError("Shape key is not a string.");
                 }
-                String key = (String)objectProperty.getKey();
+                String key = (String) objectProperty.getKey();
 
                 if (wrapper.isTransformation(i, subObject.getShape())) {
                     object.delete(key);
@@ -62,7 +64,7 @@ public class SLShapeWrapper {
             if (!(subobjectProperty.getKey() instanceof String)) {
                 throw new AssertionError("Shape key is not a string.");
             }
-            String key = inlinedPropertyName + "_" + (String)subobjectProperty.getKey();
+            String key = inlinedPropertyName + "_" + (String) subobjectProperty.getKey();
             Object value = subobjectProperty.get(subobject, false);
             object.define(key, value);
         }
@@ -112,10 +114,10 @@ public class SLShapeWrapper {
                 transformations.put(position, new HashSet<>());
             }
             transformations.get(position).add(subshape);
-            System.out.println("Transformation recorded:\n" + 
-                shape.toString() + "\n" +
-                "at position " + position.toString() + "\n" +
-                subshape.toString());
+            System.out.println("Transformation recorded:\n" +
+                    shape.toString() + "\n" +
+                    "at position " + position.toString() + "\n" +
+                    subshape.toString());
         }
     }
 }

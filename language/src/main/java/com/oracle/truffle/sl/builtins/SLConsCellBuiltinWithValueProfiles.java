@@ -2,7 +2,7 @@ package com.oracle.truffle.sl.builtins;
 
 import com.oracle.truffle.api.dsl.Specialization;
 import com.oracle.truffle.api.nodes.NodeInfo;
-import com.oracle.truffle.sl.runtime.SLProfileConsCell;
+import com.oracle.truffle.sl.runtime.conscell.SLProfileConsCell;
 
 /**
  * Built-in function to create a new generic cons cell, simply holding Objects.

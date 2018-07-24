@@ -13,7 +13,7 @@ public abstract class SLValueObject {
         transformations.put(3, m);
     }
 
-    private Shape shape;
+    protected Shape shape;
 
     public static SLValueObject newValueObject(Object... values) {
         List<Shape> subShapes = new ArrayList<>();
@@ -29,6 +29,7 @@ public abstract class SLValueObject {
                     // TODO mehrere object sizes an einem index?
                     subShapes.add(i, valueObject.getShape());
                     subValues.addAll(valueObject.getAll());
+                    System.out.println("Inlined");
                 } else {
                     subShapes.add(i, null);
                     // TODO history
@@ -47,17 +48,18 @@ public abstract class SLValueObject {
         }
 
         SLValueObject newValueObject;
+        newValueObject = new SLNaryValueObject(subValues);
 
-        if (subValues.size() == 2) {
-            newValueObject = new SLValueObject2(subValues.get(0), subValues.get(1));
-        } else if (subValues.size() == 3) {
-            newValueObject = new SLValueObject3(subValues.get(0), subValues.get(1), subValues.get(2));
-        // TODO 4
-        } else if (subValues.size() == 5) {
-            newValueObject = new SLValueObject5(subValues.get(0), subValues.get(1), subValues.get(2), subValues.get(3), subValues.get(4));
-        } else {
-            throw new RuntimeException("äh");
-        }
+        // if (subValues.size() == 2) {
+        //     newValueObject = new SLValueObject2(subValues.get(0), subValues.get(1));
+        // } else if (subValues.size() == 3) {
+        //     newValueObject = new SLValueObject3(subValues.get(0), subValues.get(1), subValues.get(2));
+        // // TODO 4
+        // } else if (subValues.size() == 5) {
+        //     newValueObject = new SLValueObject5(subValues.get(0), subValues.get(1), subValues.get(2), subValues.get(3), subValues.get(4));
+        // } else {
+        //     throw new RuntimeException("äh");
+        // }
         newValueObject.setShape(Shape.of(subShapes));
         return newValueObject;
     }

@@ -37,9 +37,11 @@ public class SLNaryValueObject extends SLValueObject {
         int end = range.get(1);
 
         if (begin == end) {
+            // Direct access of object
             return CompilerDirectives.castExact(values.get(begin), classes.get(begin));
         }
         else {
+            // Reify inlined object
             List<Object> subValues = new ArrayList<>();
 
             for (int i = begin; i <= end; i++) {

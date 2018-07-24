@@ -18,6 +18,7 @@ public abstract class SLValueObject {
             subValues.add(value);
         }
 
+        // Iterate over all fields and check if they can get inlined according to transformation list
         for (int i = 0; i < subValues.size();) {
             Object value = subValues.get(i);
             if (value instanceof SLValueObject) {
@@ -26,6 +27,7 @@ public abstract class SLValueObject {
                 Map<Integer, Set<Shape>> transformation = transformations.get(shape);
                 if (transformation != null && transformation.get(i).contains(subShape)) {
                     System.out.println("Inlined");
+                    // Inline shape
                     shape.inlineShape(i, subShape);
                     // Inline object
                     subValues.remove(i);

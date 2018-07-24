@@ -5,63 +5,72 @@ import java.util.*;
 public abstract class SLValueObject {
 
     // object size -> (index -> object size)
-    private static Map<Integer, Map<Integer, Integer>> transformations = new HashMap<>();
-
-    static {
-        Map<Integer, Integer> m = new HashMap<>();
-        m.put(0, 3);
-        transformations.put(3, m);
-    }
+    private static Map<Shape, Map<Integer, Map<Shape, Integer>>> history = new HashMap<>();
+    private static Map<Shape, Map<Integer, Set<Shape>>> transformations = new HashMap<>();
 
     protected Shape shape;
 
     public static SLValueObject newValueObject(Object... values) {
-        List<Shape> subShapes = new ArrayList<>();
         List<Object> subValues = new ArrayList<>();
 
-        int i = 0;
+        Shape shape = Shape.directAccessOf(values.length);
         for (Object value : values) {
+            subValues.add(value);
+        }
+
+        for (int i = 0; i < subValues.size();) {
+            Object value = subValues.get(i);
             if (value instanceof SLValueObject) {
                 SLValueObject valueObject = (SLValueObject) value;
-                int numFields = valueObject.getNumFields();
-                Map<Integer, Integer> transformation = transformations.get(values.length);
-                if (transformation != null && transformation.get(i) == numFields) {
-                    // TODO mehrere object sizes an einem index?
-                    subShapes.add(i, valueObject.getShape());
-                    subValues.addAll(valueObject.getAll());
+                Shape subShape = valueObject.getShape();
+                Map<Integer, Set<Shape>> transformation = transformations.get(shape);
+                if (transformation != null && transformation.get(i).contains(subShape)) {
                     System.out.println("Inlined");
+                    shape.inlineShape(i, subShape);
+                    // Inline object
+                    subValues.remove(i);
+                    subValues.addAll(i, valueObject.getAll());
+                    // Reset inlining process to allow recursive inlining
+                    i = 0;
+                    continue;
                 } else {
-                    subShapes.add(i, null);
-                    // TODO history
-                    Map<Integer, Integer> newTransformation = new HashMap<>();
-                    newTransformation.put(i, numFields);
-                    transformations.put(values.length, transformation);
-
-                    subValues.add(value);
-                    // TODO überschreibt existierende
+                    i++;
                 }
             } else {
-                subShapes.add(i, null);
-                subValues.add(value);
+                i++;
+            }
+        }
+
+        // Update history
+        history.putIfAbsent(shape, new HashMap<>());
+        Map<Integer, Map<Shape, Integer>> shapeHistory = history.get(shape);
+
+        int i = 0;
+        for (Object value : subValues) {
+            if (value instanceof SLValueObject) {
+                System.out.println("Updated history.");
+                SLValueObject valueObject = (SLValueObject) value;
+                Shape subShape = valueObject.getShape();
+                shapeHistory.putIfAbsent(i, new HashMap<>());
+                Map<Shape, Integer> indexHistory = shapeHistory.get(i);
+                indexHistory.putIfAbsent(subShape, 0);
+                int numObservations = indexHistory.get(subShape);
+                indexHistory.put(subShape, numObservations + 1);
+                
+                shapeHistory.put(i, indexHistory);
+                history.put(shape, shapeHistory);
+
+                if (numObservations == 7) {
+                    System.out.println("Added transformation.");
+                    transformations.putIfAbsent(shape, new HashMap<>());
+                    transformations.get(shape).putIfAbsent(i, new HashSet<>());
+                    transformations.get(shape).get(i).add(subShape);
+                }
             }
             i++;
         }
 
-        SLValueObject newValueObject;
-        newValueObject = new SLNaryValueObject(subValues);
-
-        // if (subValues.size() == 2) {
-        //     newValueObject = new SLValueObject2(subValues.get(0), subValues.get(1));
-        // } else if (subValues.size() == 3) {
-        //     newValueObject = new SLValueObject3(subValues.get(0), subValues.get(1), subValues.get(2));
-        // // TODO 4
-        // } else if (subValues.size() == 5) {
-        //     newValueObject = new SLValueObject5(subValues.get(0), subValues.get(1), subValues.get(2), subValues.get(3), subValues.get(4));
-        // } else {
-        //     throw new RuntimeException("äh");
-        // }
-        newValueObject.setShape(Shape.of(subShapes));
-        return newValueObject;
+        return new SLNaryValueObject(subValues, shape);
     }
 
     private void setShape(Shape shape) {

@@ -24,6 +24,11 @@ public class Shape {
     private Shape(List<Shape> subShapes) {
         this.subShapes = subShapes;
         this.shapeIndices = new ArrayList<>();
+        calculateIndices();
+    }
+
+    private void calculateIndices() {
+        this.shapeIndices.clear();
 
         int curIndex = 0;
         for (Shape shape : subShapes) {
@@ -49,5 +54,30 @@ public class Shape {
 
     public int getNumFields() {
         return subShapes.size();
+    }
+
+    public void inlineShape(int index, Shape newSubShape) {
+        int i = 0;
+        for (Shape subShape : subShapes) {
+            if (i == 0 && subShape == null) {
+                subShapes.set(i, newSubShape);
+            }
+            else if (subShape != null && subShape.getNumFields() < i) {
+                // TODO: handle setting subshape of child
+            }
+
+            i++;
+        }
+        calculateIndices();
+    }
+
+    @Override
+    public int hashCode() {
+        return subShapes.hashCode();
+    }
+
+    @Override 
+    public boolean equals(Object other) {
+        return hashCode() == other.hashCode();
     }
 }

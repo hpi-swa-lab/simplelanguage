@@ -11,10 +11,10 @@ public class SLNaryValueObject extends SLValueObject {
     private final List<Object> values;
     private final List<Class<?>> classes;
 
-    public SLNaryValueObject(List<Object> values) {
+    public SLNaryValueObject(List<Object> values, Shape shape) {
         this.values = values;
         this.classes = new ArrayList<>();
-        this.shape = Shape.directAccessOf(values.size());
+        this.shape = shape;
 
         for (Object value : values) {
             this.classes.add(value.getClass());
@@ -46,7 +46,7 @@ public class SLNaryValueObject extends SLValueObject {
                 subValues.add(this.values.get(i));
             }
 
-            return new SLNaryValueObject(subValues);
+            return new SLNaryValueObject(subValues, Shape.directAccessOf(subValues.size()));
         }
     }
 

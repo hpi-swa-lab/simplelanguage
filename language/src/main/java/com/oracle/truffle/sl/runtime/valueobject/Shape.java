@@ -1,16 +1,20 @@
 package com.oracle.truffle.sl.runtime.valueobject;
 
+import com.oracle.truffle.api.CompilerDirectives;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.IntStream;
 
+import static com.oracle.truffle.api.CompilerDirectives.*;
 import static java.util.stream.Collectors.toList;
 
 public class Shape {
 
     private final List<Shape> subShapes;
     private final List<Integer> shapeIndices;
+    private int depth;
 
     public static Shape of(List<Shape> subShapes) {
         return new Shape(subShapes);
@@ -24,6 +28,7 @@ public class Shape {
     private Shape(List<Shape> subShapes) {
         this.subShapes = subShapes;
         this.shapeIndices = new ArrayList<>();
+        this.depth = 0;
         calculateIndices();
     }
 
@@ -37,6 +42,7 @@ public class Shape {
                 curIndex += 1;
             } else {
                 curIndex += shape.getNumPrimitives();
+                this.depth = Math.max(this.depth, shape.getDepth() + 1);
             }
         }
         // add number of total primitves at end
@@ -60,6 +66,7 @@ public class Shape {
                 .mapToInt(Integer::intValue).sum();
     }
 
+    @TruffleBoundary
     void inlineShape(int inlinedFieldIndex, Shape newSubShape) {
         int beginIndex = 0;
         int i = 0;
@@ -99,6 +106,10 @@ public class Shape {
 
     public int getObjectStorageStart(int index) {
         return shapeIndices.get(index);
+    }
+
+    public int getDepth() {
+        return depth;
     }
 
     /**

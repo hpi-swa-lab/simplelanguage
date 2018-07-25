@@ -4,7 +4,7 @@ function reverse(list) {
     result = null();
 
     while (list != null()) {
-        result = cons(head(list), result);
+        result = cons2(head(list), result);
         list = tail(list);
     }
 
@@ -12,6 +12,6 @@ function reverse(list) {
 }
 
 function main() {
-    cell = cons(3, cons(2, cons(1, null())));
+    cell = cons2(3, cons2(2, cons2(1, null())));
     println(reverse(cell));
 }

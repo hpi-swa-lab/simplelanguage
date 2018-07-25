@@ -13,13 +13,13 @@ function map(list, fn) {
     aux = null();
 
     while (list != null()) {
-        aux = cons(fn(head(list)), aux);
+        aux = cons2(fn(head(list)), aux);
         list = tail(list);
     }
 
     list = null();
     while (aux != null()) {
-        list = cons(head(aux), list);
+        list = cons2(head(aux), list);
         aux = tail(aux);
     }
     
@@ -27,7 +27,7 @@ function map(list, fn) {
 }
 
 function main() {
-    list = cons(E, cons(E, cons(F, null())));
+    list = cons2(E, cons2(E, cons2(F, null())));
     mappedList = map(list, swap);
     println(mappedList);
 }

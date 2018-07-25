@@ -9,7 +9,7 @@ function filter(list, condition) {
 
     while (list != null()) {
         if (condition(head(list))) {
-            aux = cons(head(list), aux);
+            aux = cons2(head(list), aux);
         }
 
         list = tail(list);
@@ -17,7 +17,7 @@ function filter(list, condition) {
 
     list = null();
     while (aux != null()) {
-        list = cons(head(aux), list);
+        list = cons2(head(aux), list);
         aux = tail(aux);
     }
 
@@ -25,7 +25,7 @@ function filter(list, condition) {
 }
 
 function main() {
-    list = cons(1, cons(1337, cons(42, cons(84, null()))));
+    list = cons2(1, cons2(1337, cons2(42, cons2(84, null()))));
     filteredList = filter(list, isEven);
     println(filteredList);
 }

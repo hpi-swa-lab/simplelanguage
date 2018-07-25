@@ -55,17 +55,14 @@ public class Shape {
         return subShapes.size();
     }
 
-    void inlineShape(Shape newSubShape) {
-        int i = 0;
-        for (Shape subShape : subShapes) {
-            if (i == 0 && subShape == null) {
-                subShapes.set(i, newSubShape);
-            } else if (subShape != null && subShape.getNumFields() < i) {
-                // TODO: handle setting subshape of child
-            }
-
-            i++;
+    void inlineShape(int index, Shape newSubShape) {
+        Shape existingSubShape = subShapes.get(index);
+        if (existingSubShape == null) {
+            subShapes.set(index, newSubShape);
+        } else {
+            // TODO: handle setting subshape of child ?
         }
+
         calculateIndices();
     }
 

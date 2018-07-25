@@ -30,7 +30,7 @@ public abstract class SLValueObject {
                     Map<Integer, Set<Shape>> transformation = transformations.get(shape);
                     if (transformation != null && transformation.get(i).contains(subShape)) {
                         System.out.println("Inlined");
-                        shape.inlineShape(subShape);
+                        shape.inlineShape(i, subShape);
                         processedValues.addAll(valueObject.getAll());
                         inliningHappened = true;
                     } else {

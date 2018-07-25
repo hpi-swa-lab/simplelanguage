@@ -55,15 +55,50 @@ public class Shape {
         return subShapes.size();
     }
 
-    void inlineShape(int index, Shape newSubShape) {
-        Shape existingSubShape = subShapes.get(index);
-        if (existingSubShape == null) {
-            subShapes.set(index, newSubShape);
-        } else {
-            // TODO: handle setting subshape of child ?
+    private int getNumFieldsUnfoldingSubshapes() {
+        return subShapes.stream().map(shape -> shape == null ? 1 : shape.getNumFieldsUnfoldingSubshapes())
+                .mapToInt(Integer::intValue).sum();
+    }
+
+    void inlineShape(int inlinedFieldIndex, Shape newSubShape) {
+        int beginIndex = 0;
+        int i = 0;
+        while (beginIndex < getNumFieldsUnfoldingSubshapes() && i < getNumFields()) {
+
+            int endIndex = beginIndex;
+            if (subShapes.get(i) != null) {
+                Shape existingSubShape = subShapes.get(beginIndex);
+                endIndex += existingSubShape.getNumFieldsUnfoldingSubshapes();
+
+                if (inlinedFieldIndex >= beginIndex && inlinedFieldIndex <= endIndex) {
+                    existingSubShape.inlineShape(inlinedFieldIndex - beginIndex, newSubShape);
+                }
+            } else {
+                if (inlinedFieldIndex == beginIndex) {
+                    subShapes.set(i, newSubShape);
+                    break;
+                }
+            }
+            beginIndex = endIndex + 1;
+            i++;
         }
 
         calculateIndices();
+    }
+
+    public boolean isSubshapeAt(int index) {
+        return subShapes.get(index) != null;
+    }
+
+    public Shape getSubshape(int index) {
+        if (subShapes.get(index) != null) {
+            return subShapes.get(index);
+        }
+        throw new RuntimeException("No subshape found at index " + index);
+    }
+
+    public int getObjectStorageStart(int index) {
+        return shapeIndices.get(index);
     }
 
     /**

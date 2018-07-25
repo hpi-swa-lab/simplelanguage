@@ -1,7 +1,6 @@
 package com.oracle.truffle.sl.runtime.valueobject;
 
 import com.oracle.truffle.api.CompilerDirectives;
-import com.oracle.truffle.sl.runtime.valueobject.Shape.Range;
 
 import java.util.Collection;
 import java.util.List;
@@ -32,17 +31,17 @@ public class SLNaryValueObject extends SLValueObject {
             throw new RuntimeException("Index " + index + " out of bounds for SLValueObject2");
         }
 
-        Range range = shape.getSubshapeRange(index);
-        int begin = range.getBegin();
-        int end = range.getEnd();
-
-        if (begin == end) {
+        if (!shape.isSubshapeAt(index)) {
             // Direct access of object
-            return CompilerDirectives.castExact(values.get(begin), classes.get(begin));
+            int directAccessIndex = shape.getObjectStorageStart(index);
+            return CompilerDirectives.castExact(values.get(directAccessIndex), classes.get(directAccessIndex));
         } else {
             // Reify inlined object
-            List<Object> subValues = IntStream.range(begin, end + 1).mapToObj(values::get).collect(toList());
-            return new SLNaryValueObject(subValues, Shape.directAccessOf(subValues.size()));
+            Shape subshape = shape.getSubshape(index);
+
+            List<Object> subValues = values.subList(shape.getObjectStorageStart(index), shape.getObjectStorageStart(index + 1));
+
+            return new SLNaryValueObject(subValues, subshape);
         }
     }
 

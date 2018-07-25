@@ -157,6 +157,7 @@ public final class SLContext {
         installBuiltin(SLNumberCastBuiltinFactory.getInstance());
         installBuiltin(SLGarbageCollectBuiltinFactory.getInstance());
         installBuiltin(SLValueObjectBuiltinFactory.getInstance());
+        installBuiltin(SLValueObjectAccessBuiltinFactory.getInstance());
     }
 
     public void installBuiltin(NodeFactory<? extends SLBuiltinNode> factory) {

@@ -28,7 +28,7 @@ public abstract class SLValueObject {
                     SLValueObject valueObject = (SLValueObject) value;
                     Shape subShape = valueObject.getShape();
                     Map<Integer, Set<Shape>> transformation = transformations.get(shape);
-                    if (transformation != null && transformation.get(i).contains(subShape)) {
+                    if (transformation != null && transformation.get(i) != null && transformation.get(i).contains(subShape)) {
                         System.out.println("Inlined");
                         shape.inlineShape(i, subShape);
                         processedValues.addAll(valueObject.getAll());

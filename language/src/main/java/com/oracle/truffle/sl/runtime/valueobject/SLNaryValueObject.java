@@ -1,24 +1,24 @@
 package com.oracle.truffle.sl.runtime.valueobject;
 
 import com.oracle.truffle.api.CompilerDirectives;
+import com.oracle.truffle.sl.runtime.valueobject.Shape.Range;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.IntStream;
+
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 
 public class SLNaryValueObject extends SLValueObject {
 
     private final List<Object> values;
     private final List<Class<?>> classes;
 
-    public SLNaryValueObject(List<Object> values, Shape shape) {
+    SLNaryValueObject(List<Object> values, Shape shape) {
         this.values = values;
-        this.classes = new ArrayList<>();
+        this.classes = values.stream().map(Object::getClass).collect(toList());
         this.shape = shape;
-
-        for (Object value : values) {
-            this.classes.add(value.getClass());
-        }
     }
 
     @Override
@@ -32,39 +32,24 @@ public class SLNaryValueObject extends SLValueObject {
             throw new RuntimeException("Index " + index + " out of bounds for SLValueObject2");
         }
 
-        List<Integer> range = shape.getSubshapeRange(index);
-        int begin = range.get(0);
-        int end = range.get(1);
+        Range range = shape.getSubshapeRange(index);
+        int begin = range.getBegin();
+        int end = range.getEnd();
 
         if (begin == end) {
             // Direct access of object
             return CompilerDirectives.castExact(values.get(begin), classes.get(begin));
-        }
-        else {
+        } else {
             // Reify inlined object
-            List<Object> subValues = new ArrayList<>();
-
-            for (int i = begin; i <= end; i++) {
-                subValues.add(this.values.get(i));
-            }
-
+            List<Object> subValues = IntStream.range(begin, end + 1).mapToObj(values::get).collect(toList());
             return new SLNaryValueObject(subValues, Shape.directAccessOf(subValues.size()));
         }
     }
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append('[');
-
-        for (int i = 0; i < shape.getNumFields(); i++) {
-            builder.append(get(i).toString());
-            if (i != shape.getNumFields() - 1) {
-                builder.append(", ");
-            }
-        }
-
-        builder.append(']');
-        return builder.toString();
+        return IntStream.range(0, shape.getNumFields())
+                .mapToObj(i -> get(i).toString())
+                .collect(joining(", ", "[", "]"));
     }
 }

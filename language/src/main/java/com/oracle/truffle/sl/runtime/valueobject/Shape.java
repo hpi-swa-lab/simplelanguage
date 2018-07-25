@@ -1,8 +1,11 @@
 package com.oracle.truffle.sl.runtime.valueobject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.IntStream;
+
+import static java.util.stream.Collectors.toList;
 
 public class Shape {
 
@@ -13,11 +16,8 @@ public class Shape {
         return new Shape(subShapes);
     }
 
-    public static Shape directAccessOf(int numElements) {
-        List<Shape> nullElements = new ArrayList<>();
-        for (int i = 0; i < numElements; i++) {
-            nullElements.add(null);
-        }
+    static Shape directAccessOf(int numElements) {
+        List<Shape> nullElements = IntStream.range(0, numElements).mapToObj(i -> (Shape) null).collect(toList());
         return new Shape(nullElements);
     }
 
@@ -35,8 +35,7 @@ public class Shape {
             this.shapeIndices.add(curIndex);
             if (shape == null) {
                 curIndex += 1;
-            }
-            else {
+            } else {
                 curIndex += shape.getNumPrimitives();
             }
         }
@@ -48,21 +47,20 @@ public class Shape {
         return shapeIndices.get(shapeIndices.size() - 1);
     }
 
-    public List<Integer> getSubshapeRange(int index) {
-        return Arrays.asList(shapeIndices.get(index), shapeIndices.get(index + 1) - 1); 
+    Range getSubshapeRange(int index) {
+        return new Range(shapeIndices.get(index), shapeIndices.get(index + 1) - 1);
     }
 
-    public int getNumFields() {
+    int getNumFields() {
         return subShapes.size();
     }
 
-    public void inlineShape(int index, Shape newSubShape) {
+    void inlineShape(Shape newSubShape) {
         int i = 0;
         for (Shape subShape : subShapes) {
             if (i == 0 && subShape == null) {
                 subShapes.set(i, newSubShape);
-            }
-            else if (subShape != null && subShape.getNumFields() < i) {
+            } else if (subShape != null && subShape.getNumFields() < i) {
                 // TODO: handle setting subshape of child
             }
 
@@ -71,13 +69,37 @@ public class Shape {
         calculateIndices();
     }
 
-    @Override
-    public int hashCode() {
-        return subShapes.hashCode();
+    /**
+     * Range with inclusive begin and end
+     */
+    class Range {
+        private final int begin;
+        private final int end;
+
+        Range(int begin, int end) {
+            this.begin = begin;
+            this.end = end;
+        }
+
+        int getBegin() {
+            return begin;
+        }
+
+        int getEnd() {
+            return end;
+        }
     }
 
-    @Override 
-    public boolean equals(Object other) {
-        return hashCode() == other.hashCode();
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Shape shape = (Shape) o;
+        return Objects.equals(subShapes, shape.subShapes);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(subShapes);
     }
 }

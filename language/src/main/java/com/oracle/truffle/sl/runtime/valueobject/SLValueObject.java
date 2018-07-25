@@ -11,37 +11,39 @@ public abstract class SLValueObject {
     protected Shape shape;
 
     public static SLValueObject newValueObject(Object... values) {
-        List<Object> subValues = new ArrayList<>();
 
         Shape shape = Shape.directAccessOf(values.length);
-        for (Object value : values) {
-            subValues.add(value);
-        }
+        List<Object> subValues = Arrays.asList(values);
 
-        // Iterate over all fields and check if they can get inlined according to transformation list
-        for (int i = 0; i < subValues.size();) {
-            Object value = subValues.get(i);
-            if (value instanceof SLValueObject) {
-                SLValueObject valueObject = (SLValueObject) value;
-                Shape subShape = valueObject.getShape();
-                Map<Integer, Set<Shape>> transformation = transformations.get(shape);
-                if (transformation != null && transformation.get(i).contains(subShape)) {
-                    System.out.println("Inlined");
-                    // Inline shape
-                    shape.inlineShape(i, subShape);
-                    // Inline object
-                    subValues.remove(i);
-                    subValues.addAll(i, valueObject.getAll());
-                    // Reset inlining process to allow recursive inlining
-                    i = 0;
-                    continue;
+        boolean inliningHappened;
+        // always do one pass over elements, if inlining happened, do another to check for recursive inlining
+        do {
+            inliningHappened = false;
+            List<Object> processedValues = new ArrayList<>();
+
+            // Iterate over all fields and check if they can get inlined according to transformation list
+            for (int i = 0; i < subValues.size(); i++) {
+                Object value = subValues.get(i);
+                if (value instanceof SLValueObject) {
+                    SLValueObject valueObject = (SLValueObject) value;
+                    Shape subShape = valueObject.getShape();
+                    Map<Integer, Set<Shape>> transformation = transformations.get(shape);
+                    if (transformation != null && transformation.get(i).contains(subShape)) {
+                        System.out.println("Inlined");
+                        shape.inlineShape(subShape);
+                        processedValues.addAll(valueObject.getAll());
+                        inliningHappened = true;
+                    } else {
+                        processedValues.add(valueObject);
+                    }
                 } else {
-                    i++;
+                    processedValues.add(value);
                 }
-            } else {
-                i++;
             }
-        }
+
+            subValues = processedValues;
+        } while (inliningHappened);
+
 
         // Update history
         history.putIfAbsent(shape, new HashMap<>());
@@ -55,12 +57,8 @@ public abstract class SLValueObject {
                 Shape subShape = valueObject.getShape();
                 shapeHistory.putIfAbsent(i, new HashMap<>());
                 Map<Shape, Integer> indexHistory = shapeHistory.get(i);
-                indexHistory.putIfAbsent(subShape, 0);
-                int numObservations = indexHistory.get(subShape);
+                int numObservations = indexHistory.getOrDefault(subShape, 0);
                 indexHistory.put(subShape, numObservations + 1);
-                
-                shapeHistory.put(i, indexHistory);
-                history.put(shape, shapeHistory);
 
                 if (numObservations == 7) {
                     System.out.println("Added transformation.");

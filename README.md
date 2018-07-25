@@ -68,3 +68,24 @@ See
 [1] Pape et al.: Adaptive Just-in-time Value Class Optimization
 for Lowering Memory Consumption and Improving Execution Time
 Performance
+
+
+## Usage
+
+Build the project with `mvn install [-DskipTests]`
+
+To execute .sl scripts, use the `sl` executable in the top level directory.
+We added some flags to provide more information, such as `-dump`, `-trace` and `-gc`.
+Those set different GraalVM flags, see the `sl` file for more information.
+
+In the folder `language/benchmarks`, there are a few .sl scripts we used for benchmarking.
+They can be called with the `SL_RUN` and `SL_RUN_ALL` bash-scripts in the same folder.
+
+`SL_RUN` executes a given script (`Append`, `Filter`, `Map`, `Reverse`) with a given list size and number of repetitions:
+- `./SL_RUN <listSize> <numRepetitions> <script>`, e.g., `./SL_RUN 10000 10 Append`
+
+`SL_RUN_ALL` calls `SL_RUN`  for all 4 scripts with a given list size, number of `SL_RUN` calls per script and number of repetitions:
+- `./SL_RUN_ALL <listSize> <numSlCalls> <numRepetitions>`, e.g. `./SL_RUN_ALL 10000 5 10`
+
+To be able to pass different sizes to the sl-scripts, we used the `readln()` builtin.
+The `SL_RUN` forwards values to them using `printf` piped to their stdin.

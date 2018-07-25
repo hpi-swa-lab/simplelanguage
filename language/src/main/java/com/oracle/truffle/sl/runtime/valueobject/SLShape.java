@@ -1,7 +1,5 @@
 package com.oracle.truffle.sl.runtime.valueobject;
 
-import com.oracle.truffle.api.CompilerDirectives;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -10,22 +8,22 @@ import java.util.stream.IntStream;
 import static com.oracle.truffle.api.CompilerDirectives.*;
 import static java.util.stream.Collectors.toList;
 
-public class Shape {
+public class SLShape {
 
-    private final List<Shape> subShapes;
+    private final List<SLShape> subShapes;
     private final List<Integer> shapeIndices;
     private int depth;
 
-    public static Shape of(List<Shape> subShapes) {
-        return new Shape(subShapes);
+    public static SLShape of(List<SLShape> subShapes) {
+        return new SLShape(subShapes);
     }
 
-    static Shape directAccessOf(int numElements) {
-        List<Shape> nullElements = IntStream.range(0, numElements).mapToObj(i -> (Shape) null).collect(toList());
-        return new Shape(nullElements);
+    static SLShape directAccessOf(int numElements) {
+        List<SLShape> nullElements = IntStream.range(0, numElements).mapToObj(i -> (SLShape) null).collect(toList());
+        return new SLShape(nullElements);
     }
 
-    private Shape(List<Shape> subShapes) {
+    private SLShape(List<SLShape> subShapes) {
         this.subShapes = subShapes;
         this.shapeIndices = new ArrayList<>();
         this.depth = 0;
@@ -36,7 +34,7 @@ public class Shape {
         this.shapeIndices.clear();
 
         int curIndex = 0;
-        for (Shape shape : subShapes) {
+        for (SLShape shape : subShapes) {
             this.shapeIndices.add(curIndex);
             if (shape == null) {
                 curIndex += 1;
@@ -67,14 +65,14 @@ public class Shape {
     }
 
     @TruffleBoundary
-    void inlineShape(int inlinedFieldIndex, Shape newSubShape) {
+    void inlineShape(int inlinedFieldIndex, SLShape newSubShape) {
         int beginIndex = 0;
         int i = 0;
         while (beginIndex < getNumFieldsUnfoldingSubshapes() && i < getNumFields()) {
 
             int endIndex = beginIndex;
             if (subShapes.get(i) != null) {
-                Shape existingSubShape = subShapes.get(beginIndex);
+                SLShape existingSubShape = subShapes.get(beginIndex);
                 endIndex += existingSubShape.getNumFieldsUnfoldingSubshapes();
 
                 if (inlinedFieldIndex >= beginIndex && inlinedFieldIndex <= endIndex) {
@@ -97,7 +95,7 @@ public class Shape {
         return subShapes.get(index) != null;
     }
 
-    public Shape getSubshape(int index) {
+    public SLShape getSubshape(int index) {
         if (subShapes.get(index) != null) {
             return subShapes.get(index);
         }
@@ -137,7 +135,7 @@ public class Shape {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Shape shape = (Shape) o;
+        SLShape shape = (SLShape) o;
         return Objects.equals(subShapes, shape.subShapes);
     }
 

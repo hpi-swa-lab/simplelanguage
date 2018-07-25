@@ -14,7 +14,7 @@ public class SLNaryValueObject extends SLValueObject {
     private final List<Object> values;
     private final List<Class<?>> classes;
 
-    SLNaryValueObject(List<Object> values, Shape shape) {
+    SLNaryValueObject(List<Object> values, SLShape shape) {
         this.values = values;
         this.classes = values.stream().map(Object::getClass).collect(toList());
         this.shape = shape;
@@ -37,7 +37,7 @@ public class SLNaryValueObject extends SLValueObject {
             return CompilerDirectives.castExact(values.get(directAccessIndex), classes.get(directAccessIndex));
         } else {
             // Reify inlined object
-            Shape subshape = shape.getSubshape(index);
+            SLShape subshape = shape.getSubshape(index);
 
             List<Object> subValues = values.subList(shape.getObjectStorageStart(index), shape.getObjectStorageStart(index + 1));
 
